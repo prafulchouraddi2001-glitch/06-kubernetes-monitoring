@@ -409,6 +409,22 @@ helm template webapp-release ./helm-webapp
 
 For a Pod that is not running, begin with `kubectl describe pod` and inspect the events. For application failures, inspect container logs. For connectivity issues, check Service selectors, endpoints, namespaces, and the relevant networking configuration.
 
+### Prometheus Target Health and Troubleshooting
+
+Prometheus was configured to monitor Kubernetes components and supporting services in the local `kind` cluster.
+
+**Validation results**
+- 14 active targets reported `UP`.
+- 4 active targets reported `DOWN`.
+- The unavailable targets were kube-controller-manager, kube-scheduler, kube-etcd, and kube-proxy.
+- The first two components were configured to bind their metrics endpoints to `127.0.0.1`; etcd's metrics listener was also bound to localhost.
+- The kube-proxy target returned a connection-refused error, while its `metricsBindAddress` configuration was empty.
+
+**Root cause:** Prometheus attempted to scrape metrics through the node's container IP, but the corresponding endpoints were not accepting connections at those addresses.
+
+**Security consideration:** Control-plane metrics endpoints were not exposed more broadly just to achieve an all-green target dashboard. This remains a documented limitation of the local monitoring environment.
+
+
 ## Security Practices
 
 - Do not commit real passwords, API keys, access tokens, or cloud credentials.
