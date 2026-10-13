@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: toleration-test
+  namespace: devops-app
+
+spec:
+  tolerations:
+    - key: workload
+      operator: Equal
+      value: devops
+      effect: NoSchedule
+
+  containers:
+    - name: test
+      image: busybox:1.36
+      command: ["sh", "-c", "sleep 3600"]

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webapp-stateful
+  namespace: devops-app
+spec:
+  serviceName: webapp-stateful
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: webapp-stateful
+
+  template:
+    metadata:
+      labels:
+        app: webapp-stateful
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: webapp-data
+              mountPath: /data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: webapp-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        resources:
+          requests:
+            storage: 1Gi
+
+        storageClassName: standard

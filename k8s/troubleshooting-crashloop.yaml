@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: troubleshooting-crashloop
+  namespace: devops-app
+
+spec:
+  containers:
+    - name: crash-test
+      image: busybox:1.36
+      command: ["sh", "-c", "echo 'Application starting...'; exit 1"]

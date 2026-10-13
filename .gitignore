@@ -1,0 +1,22 @@
+# Kubernetes secrets
+k8s/secret.yaml
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Terraform state and local data
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Python/cache and editor files
+__pycache__/
+*.py[cod]
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
